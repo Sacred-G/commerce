@@ -1,0 +1,35 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Your Completed Auctions</h2>
+    {% if completed_auctions %}
+        <div class="row">
+            {% for auction in completed_auctions %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if auction.image_url %}
+                            <img src="{{ auction.image_url }}" class="card-img-top" alt="{{ auction.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ auction.title }}</h5>
+                            <p class="card-text">Final price: ${{ auction.current_price }}</p>
+                            <p class="card-text">
+                                {% if auction.winner %}
+                                    Winner: {{ auction.winner.username }}
+                                {% else %}
+                                    No winner
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'listing' auction.id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You don't have any completed auctions.</p>
+    {% endif %}
+</div>
+{% endblock %}

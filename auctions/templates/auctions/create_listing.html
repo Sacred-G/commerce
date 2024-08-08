@@ -1,0 +1,82 @@
+<!-- File: auctions/templates/auctions/create_listing.html -->
+{% extends "auctions/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-4">Create New Listing</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        
+        <h3 class="mt-4">Additional Images</h3>
+        {{ image_formset.management_form }}
+        <div id="image-formset">
+            {% for image_form in image_formset %}
+                <div class="image-form mb-3">
+                    {{ image_form|crispy }}
+                    {% if not forloop.first %}
+                        <button type="button" class="btn btn-danger remove-form">Remove</button>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add-image-form" class="btn btn-secondary mt-2">Add Another Image</button>
+        
+        <button type="submit" class="btn btn-primary mt-3">Create Listing</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formsetContainer = document.getElementById('image-formset');
+    const addButton = document.getElementById('add-image-form');
+    const totalForms = document.getElementById('id_images-TOTAL_FORMS');
+
+    addButton.addEventListener('click', function() {
+        const formCount = formsetContainer.children.length;
+        const newForm = formsetContainer.children[0].cloneNode(true);
+        
+        newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${formCount}-`);
+        newForm.querySelectorAll('input').forEach(input => input.value = '');
+        
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'btn btn-danger remove-form';
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', function() {
+            formsetContainer.removeChild(this.parentNode);
+            updateForms();
+        });
+        
+        newForm.appendChild(removeButton);
+        formsetContainer.appendChild(newForm);
+        updateForms();
+    });
+
+    formsetContainer.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('remove-form')) {
+            e.target.parentNode.remove();
+            updateForms();
+        }
+    });
+
+    function updateForms() {
+        totalForms.value = formsetContainer.children.length;
+        Array.from(formsetContainer.children).forEach((form, index) => {
+            form.innerHTML = form.innerHTML.replace(/-\d+-/g, `-${index}-`);
+        });
+    }
+});
+</script>
+{% endblock %}

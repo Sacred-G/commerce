@@ -1,0 +1,9 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ message.subject }}</h2>
+    <p>From: {{ message.sender }}</p>
+    <p>Sent: {{ message.created_at }}</p>
+    <div>{{ message.body }}</div>
+    <a href="{% url 'inbox' %}" class="btn btn-secondary">Back to Inbox</a>
+{% endblock %}

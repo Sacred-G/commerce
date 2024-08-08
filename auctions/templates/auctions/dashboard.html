@@ -1,0 +1,286 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+
+{% block title %}Auctions | Dashboard{% endblock %}
+
+{% block categories %}
+    <!-- Divider -->
+    <hr class='sidebar-divider'>
+    
+    <!-- Heading -->
+    <div class='sidebar-heading'>
+        Categories
+    </div>
+
+{% for category in categories %}
+        <li class='nav-item'>
+            <a class='nav-link' href="{% url 'category' category.name %}">
+                <i class='fas fa-fw fa-folder-open'></i>
+                <span class='text-uppercase'>{{ category.name }}</span>
+                <span class='badge-custom'>
+                    {{ category.listing_set.count }}
+                </span>
+            </a>
+        </li>
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    <!-- Page Heading -->
+    <h1 class='h3 mb-4 text-gray-800'>Dashboard</h1>
+
+
+        <div class="row">
+            <!-- Users Count -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Auctions</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_auctions }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Auctions Count -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Auctions</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_auctions }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-gavel fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Categories Count -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Categories</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_categories }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+          
+
+        
+        <div class="row">
+            <!-- Most Bids Auction -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Most Bids</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_bids }}</div>
+                                <div class="text-xs text-gray-600">{{ highest_bid_listing.title }} bids</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-trophy fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Total Value of Active Auctions -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Most Popular Category</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ popular_category.name  }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Most Expensive Active Auction -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Highest Price
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    ${{ highest_price|floatformat:2 }}
+                                </div>
+                                <div class="text-xs text-gray-600">
+                                    {{ highest_price_listing.title }}
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1"> Most Recent</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ latest_auction.title  }}</div>
+                         
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-gem fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   <!-- New row for charts -->
+   <div class="row mb-4">
+    <!-- Category Pie Chart -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Listings by Category Pie Chart</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+        <!-- Category Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Listings by Category Bar Chart</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <i class="fas fa-clock me-1"></i>
+                    Auctions Ending Soon
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for auction in ending_soon_auctions %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="{% url 'listing' auction.id %}">{{ auction.title }}</a>
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ auction.end_date|timeuntil }}
+                                </span>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No auctions ending soon.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <!-- You can add more charts or widgets here -->
+
+
+<!-- Existing listing cards -->
+<div class="row md-4">
+    <div class="card-header">
+        <i class="fas fa-clock me-1"></i>
+       Recently Viewed
+    </div>
+    {% for listing in listings %}
+    <div class="col-md-3 mb-4">
+     
+        <div class="card w-100">
+            {% if listing.main_image %}
+            <img src="{{ listing.main_image.url }}" class="card-img-top" alt="{{ listing.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ listing.title }}</h5>
+                <p class="card-text">Current Price: ${{ listing.current_price }}</p>
+                <p class="card-text">Number of Bids: {{ listing.bid_count }}</p>
+                <a href="{% url 'listing' listing.id %}" class="btn btn-primary">View Listing</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- All Auctions Table -->
+<div class='card'>
+    <div class='card-header'>
+        <i class='fas fa-table me-1'></i>
+        All Auctions
+    </div>
+    <div class='card-body'>
+        <table class='table table-hover'>
+            <thead>
+                <tr>
+                    <th scope='col'>Title</th>
+                    <th scope='col'>Category</th>
+                    <th scope='col'>Date Created</th>
+                    <th scope='col'>Starting Bid</th>
+                    <th scope='col'>Current Bid</th>
+                    <th scope='col'>Created By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for listing in listings %}
+                <tr>
+                    <td><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></td>
+                    <td>{{ listing.category.name }}</td>
+                    <td>{{ listing.created_at|date:"M d, Y" }}</td>
+                    <td>${{ listing.starting_bid }}</td>
+                    <td>${{ listing.current_price }}</td>
+                    <td>{{ listing.created_by.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Add pagination here if needed -->
+    </div>
+</div>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="{% static 'auctions/js/chart-pie-demo.js' %}"></script>
+<script src="{% static 'auctions/js/chart-bar-demo.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+
+{% extends "auctions/layout.html" %}
+{% block body %}
+<div class="container mt-5">
+    <h2>Payment for {{ listing.title }}</h2>
+    <p>Total amount: ${{ listing.buy_it_now_price }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="card_number">Card Number</label>
+            <input type="text" class="form-control" id="card_number" name="card_number" required>
+        </div>
+        <div class="form-group">
+            <label for="expiry_date">Expiry Date</label>
+            <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/YY" required>
+        </div>
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="text" class="form-control" id="cvv" name="cvv" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Process Payment</button>
+    </form>
+</div>
+{% endblock %}

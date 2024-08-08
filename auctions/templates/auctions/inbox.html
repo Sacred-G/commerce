@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<div class="container">
+    <h2>Inbox</h2>
+    <a href="{% url 'send_message' %}" class="btn btn-primary mb-3">Compose Message</a>
+    {% if messages %}
+    <ul class="list-group">
+    {% for message in messages %}
+    <li class="list-group-item {% if not message.read %}font-weight-bold{% endif %}">
+        <a href="{% url 'view_message' message.id %}">
+            {% if message.is_system_message %}
+                <span class="text-success">System:</span>
+            {% elif message.sender %}
+                {{ message.sender }}:
+            {% else %}
+                Unknown:
+            {% endif %}
+            {{ message.subject }}
+        </a>
+    </li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p>No messages in your inbox.</p>
+    {% endif %}
+</div>
+{% endblock %}
