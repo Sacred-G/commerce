@@ -2,75 +2,17 @@
 
 # This was created for CS50w project2!!
 
-![images](https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png)
+## Screenshots
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-    <a href="https://i.ibb.co/3NNQWkt/Screenshot-2024-08-09-at-12-46-05-AM.png">
-        <img src="https://i.ibb.co/3NNQWkt/Screenshot-2024-08-09-at-12-46-05-AM.png" alt="HOMESCREEN" style="max-width: 100%; border-radius: 10px;">
-        <p>HOMESCREEN</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-    <a href="https://i.ibb.co/gT0HKfb/Screenshot-2024-08-09-at-12-45-55-AM.png">
-        <img src="https://i.ibb.co/gT0HKfb/Screenshot-2024-08-09-at-12-45-55-AM.png" alt="DASHBOARD" style="max-width: 100%; border-radius: 10px;">
-        <p>DASHBOARD</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-    <a href="https://i.ibb.co/KrPTHKv/Screenshot-2024-08-09-at-12-53-33-AM.png">
-        <img src="https://i.ibb.co/KrPTHKv/Screenshot-2024-08-09-at-12-53-33-AM.png" alt="PROFILE" style="max-width: 100%; border-radius: 10px;">
-        <p>PROFILE</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/ryyP5gL/Screenshot-2024-08-09-at-12-52-14-AM.png">
-        <img src="https://i.ibb.co/ryyP5gL/Screenshot-2024-08-09-at-12-52-14-AM.png" alt="CATEGORY" style="max-width: 100%; border-radius: 10px;">
-        <p>CATEGORY</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/Z2wktpy/Screenshot-2024-08-09-at-12-52-41-AM.png">
-        <img src="https://i.ibb.co/Z2wktpy/Screenshot-2024-08-09-at-12-52-41-AM.png" alt="HELP_LIBRARY" style="max-width: 100%; border-radius: 10px;"> 
-        <p>HELP_LIBRARY</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/gvg87bK/Screenshot-2024-08-09-at-12-50-42-AM.png">
-        <img src="https://i.ibb.co/gvg87bK/Screenshot-2024-08-09-at-12-50-42-AM.png">
-        <p>PAYMENT</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/K7Qy2bM/Screenshot-2024-08-09-at-12-51-11-AM.png">
-        <img src="https://i.ibb.co/K7Qy2bM/Screenshot-2024-08-09-at-12-51-11-AM.png" alt="CREDITCARD" style="max-width: 100%; border-radius: 10px;">
-        <p>CREDITCARD</p>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/tDL8qQS/Screenshot-2024-08-09-at-12-53-43-AM.png">
-        <img src="https://i.ibb.co/tDL8qQS/Screenshot-2024-08-09-at-12-53-43-AM.png" alt="MESSAGING" style="max-width: 100%; border-radius: 10px;">
-        <p>MESSAGING</p>
-        </a>
-    </div>
-        <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/jTGG1Qc/Screenshot-2024-08-09-at-1-50-16-AM.png">
-        <img src="https://i.ibb.co/jTGG1Qc/Screenshot-2024-08-09-at-1-50-16-AM.png" alt="RECENTLYVIEWED" style="max-width: 100%; border-radius: 10px;">
-        <p>RECENTLY_VIEWED </p>
-        </a>
-    </div>
-    <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/RzDTtpt/BUYITNOW.png">
-        <img src="https://i.ibb.co/RzDTtpt/BUYITNOW.png" alt="BUYITNOW" style="max-width: 100%; border-radius: 10px;">
-        <p>BUT_IT_NOW </p>
-        </a>
-    </div>
-        <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/RhYWyyL/Screenshot-2024-08-09-at-12-50-28-AM.png">
-        <img src="https://i.ibb.co/RhYWyyL/Screenshot-2024-08-09-at-12-50-28-AM.png" alt="COMMENTS" style="max-width: 100%; border-radius: 10px;">
-        <p>COMMENTS</p>
-        </a>
-    </div>
-<div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
-        <a href="https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png">
-        <img src="https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png" alt="RECENT_ACTIVITY" style="max-width: 100%; border-radius: 10px;">
-        <p>RECENT_ACTIVITY</p>
-        </a>
-    </div>
-</div>
+| HOMESCREEN | DASHBOARD | PROFILE |
+|------------|-----------|---------|
+| ![HOMESCREEN](https://i.ibb.co/3NNQWkt/Screenshot-2024-08-09-at-12-46-05-AM.png) | ![DASHBOARD](https://i.ibb.co/gT0HKfb/Screenshot-2024-08-09-at-12-45-55-AM.png) | ![PROFILE](https://i.ibb.co/KrPTHKv/Screenshot-2024-08-09-at-12-53-33-AM.png) |
+| CATEGORY | HELP_LIBRARY | PAYMENT |
+| ![CATEGORY](https://i.ibb.co/ryyP5gL/Screenshot-2024-08-09-at-12-52-14-AM.png) | ![HELP_LIBRARY](https://i.ibb.co/Z2wktpy/Screenshot-2024-08-09-at-12-52-41-AM.png) | ![PAYMENT](https://i.ibb.co/gvg87bK/Screenshot-2024-08-09-at-12-50-42-AM.png) |
+| CREDITCARD | MESSAGING | RECENTLY_VIEWED |
+| ![CREDITCARD](https://i.ibb.co/K7Qy2bM/Screenshot-2024-08-09-at-12-51-11-AM.png) | ![MESSAGING](https://i.ibb.co/tDL8qQS/Screenshot-2024-08-09-at-12-53-43-AM.png) | ![RECENTLY_VIEWED](https://i.ibb.co/jTGG1Qc/Screenshot-2024-08-09-at-1-50-16-AM.png) |
+| BUYITNOW | COMMENTS | RECENT_ACTIVITY |
+| ![BUYITNOW](https://i.ibb.co/RzDTtpt/BUYITNOW.png) | ![COMMENTS](https://i.ibb.co/RhYWyyL/Screenshot-2024-08-09-at-12-50-28-AM.png) | ![RECENT_ACTIVITY](https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png) |
 
 ## Overview
 This is a Django-based web application for online auctions. Users can create listings, bid on items, add items to their watchlist, and interact with other users through a messaging system. The application now includes payment processing integration with PayPal and Stripe.
