@@ -2,7 +2,7 @@
 
 # This was created for CS50w project2!!
 
-[images](https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png)
+![images](https://i.ibb.co/T1bHMcn/Screenshot-2024-08-09-at-02-00-15-SGB-Auctions.png)
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
     <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
