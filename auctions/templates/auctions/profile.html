@@ -1,38 +1,74 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
-
-
+{% load custom_filters %}
 {% block body %}
-<div class="container">
-    <h2>User Profile</h2>
+<div class="container py-5">
+    <h2 class="mb-4">User Profile</h2>
     <div class="row">
         <div class="col-md-4">
-            <img src="{{ user.profile.profile_picture.url|default:'media/profile_pics/steven.jpg' }}" class="img-fluid rounded-circle mb-3" alt="{{ user.username }}">
-            <h3>{{ user.username }}</h3>
-            <p>{{ user.profile.bio }}</p>
+            <div class="text-center">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="{{ user.username }}" style="width: 200px; height: 200px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'auctions/images/default_profile.png' %}" class="img-fluid rounded-circle mb-3" alt="{{ user.username }}" style="width: 200px; height: 200px; object-fit: cover;">
+                {% endif %}
+                <h3>{{ user.username }}</h3>
+                <p class="text-muted">{{ user.profile.bio|default:"No bio available" }}</p>
+            </div>
         </div>
         <div class="col-md-8">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ user_form.as_p }}
-                {{ profile_form.as_p }}
+                <div class="mb-3">
+                    <h4>Personal Information</h4>
+                    {{ user_form.as_p }}
+                </div>
+                <div class="mb-3">
+                    <h4>Profile Information</h4>
+                    {{ profile_form.as_p }}
+                </div>
                 <button type="submit" class="btn btn-primary">Update Profile</button>
             </form>
         </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-5">
         <div class="col-md-6">
-            <h4>Auction Statistics</h4>
-            <ul>
-                <li>Total Auctions Won: {{ user.profile.total_auctions_won }}</li>
-                <li>Total Auctions Created: {{ user.profile.total_auctions_created }}</li>
-                <li>User Rating: {{ user.profile.rating|floatformat:1 }} / 5.0</li>
-            </ul>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Auction Statistics</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Total Auctions Won: {{ user.profile.total_auctions_won }}</li>
+                        <li class="list-group-item">Total Auctions Created: {{ user.profile.total_auctions_created }}</li>
+                        <li class="list-group-item">User Rating: {{ user.profile.rating|floatformat:1 }} / 5.0</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
-            <h4>Recent Activity</h4>
-            <!-- You can add a list of recent bids or created auctions here -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Recent Activity</h4>
+                    {% if recent_activities %}
+                        <ul class="list-group list-group-flush">
+                        {% for activity in recent_activities %}
+                            <li class="list-group-item">
+                                {% if activity|class_name == 'Bid' %}
+                                    <i class="fas fa-gavel text-primary"></i> Bid ${{ activity.amount }} on 
+                                    <a href="{% url 'listing' activity.auction.id %}">{{ activity.auction.title }}</a>
+                                    <small class="text-muted d-block">{{ activity.date|date:"M d, Y H:i" }}</small>
+                                {% elif activity|class_name == 'AuctionListing' %}
+                                    <i class="fas fa-list-alt text-success"></i> Created auction 
+                                    <a href="{% url 'listing' activity.id %}">{{ activity.title }}</a>
+                                    <small class="text-muted d-block">{{ activity.created_at|date:"M d, Y H:i" }}</small>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="card-text">No recent activity to display.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

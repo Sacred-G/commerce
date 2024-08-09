@@ -92,6 +92,8 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['recipient', 'subject', 'body']
 
+
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -100,6 +102,5 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('bio', 'location', 'birth_date', 'phone_number', 'profile_picture')
-        
+        fields = ('bio', 'profile_picture')
         

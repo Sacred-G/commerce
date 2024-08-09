@@ -389,33 +389,6 @@ def add_comment(request, listing_id):
 
 
 
-@login_required
-def auction_create(request):
-    if request.method == "POST":
-        auction_form = AuctionForm(request.POST)
-        image_form = AuctionImageForm(request.POST, request.FILES)
-        if auction_form.is_valid() and image_form.is_valid():
-            auction = auction_form.save(commit=False)
-            auction.created_by = request.user
-            auction.current_price = auction.starting_bid
-            auction.save()
-            images = image_form.save(commit=False)
-            for image in images:
-                image.auction = auction
-                image.save()
-            return render(request, "auctions/auction_create.html", {"success": True})
-    else:
-        auction_form = AuctionForm()
-        image_form = AuctionImageForm()
-
-    categories = Category.objects.all()
-    return render(request, "auctions/auction_create.html", {
-        "auction_form": auction_form,
-        "image_form": image_form,
-        "categories": categories,
-        "title": "Create Auction"
-    })
-
     
 def active_auctions_view(request):
     active_listings = AuctionListing.objects.filter(is_active=True)
@@ -503,32 +476,39 @@ def view_message(request, message_id):
 
 def get_unread_count(user):
     return Message.objects.filter(recipient=user, read=False).count()
-
 @login_required
 def profile(request):
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile(user=request.user)
-        profile.save()
-    
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, 'Your profile was successfully updated!')
             return redirect('profile')
     else:
         user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=profile)
+        profile_form = ProfileForm(instance=request.user.profile)
+    
+    # Fetch recent bids
+    recent_bids = Bid.objects.filter(user=request.user).order_by('-date')[:5]
+    
+    # Fetch recent created auctions
+    recent_auctions = AuctionListing.objects.filter(created_by=request.user).order_by('-created_at')[:5]
+    
+    # Combine and sort recent activities
+    recent_activities = sorted(
+        list(recent_bids) + list(recent_auctions),
+        key=lambda x: x.date if hasattr(x, 'date') else x.created_at,
+        reverse=True
+    )[:10]  # Limit to 10 most recent activities
     
     context = {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'recent_activities': recent_activities,
     }
     return render(request, 'auctions/profile.html', context)
-
 
 
 
@@ -653,3 +633,53 @@ def buy_it_now(request, listing_id):
 def completed_auctions(request):
     completed_auctions = AuctionListing.objects.filter(created_by=request.user, is_active=False)
     return render(request, 'auctions/completed_auctions.html', {'completed_auctions': completed_auctions})
+
+
+
+@login_required
+def payment_view(request, listing_id):
+    listing = AuctionListing.objects.get(id=listing_id)
+    context = {
+        'listing': listing,
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
+    }
+    return render(request, 'auctions/payment.html', context)
+
+@csrf_exempt
+def stripe_payment(request, listing_id):
+    if request.method == 'POST':
+        listing = AuctionListing.objects.get(id=listing_id)
+        token = request.POST['stripeToken']
+        try:
+            charge = stripe.Charge.create(
+                amount=int(listing.current_price * 100),
+                currency='usd',
+                description=f'Payment for {listing.title}',
+                source=token,
+            )
+            # Process successful payment (e.g., mark listing as sold, create order, etc.)
+            return redirect('payment_success', listing_id=listing_id)
+        except stripe.error.CardError as e:
+            # Handle failed payment
+            return render(request, 'auctions/payment.html', {
+                'listing': listing,
+                'error': str(e)
+            })
+
+@csrf_exempt
+def paypal_create_order(request, listing_id):
+    listing = AuctionListing.objects.get(id=listing_id)
+    # Implement PayPal order creation logic here
+    # This is a placeholder response
+    return JsonResponse({'id': 'PAYPAL_ORDER_ID'})
+
+@csrf_exempt
+def paypal_capture_order(request, listing_id):
+    # Implement PayPal order capture logic here
+    # This is a placeholder response
+    return JsonResponse({'status': 'success'})
+
+def payment_success(request, listing_id):
+    listing = AuctionListing.objects.get(id=listing_id)
+    return render(request, 'auctions/payment_success.html', {'listing': listing})

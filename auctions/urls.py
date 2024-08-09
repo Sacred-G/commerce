@@ -38,6 +38,11 @@ urlpatterns = [
     path('auctions/won/', views.auctions_won, name='won_auctions'),
     path('auctions/completed/', views.completed_auctions, name='completed_auctions'),
     path('listing/<int:listing_id>/confirm-payment/', views.confirm_payment, name='confirm_payment'),
+    path('payment/<int:listing_id>/', views.payment_view, name='payment_view'),
+    path('stripe-payment/<int:listing_id>/', views.stripe_payment, name='stripe_payment'),
+    path('paypal-create-order/<int:listing_id>/', views.paypal_create_order, name='paypal_create_order'),
+    path('paypal-capture-order/<int:listing_id>/', views.paypal_capture_order, name='paypal_capture_order'),
+    path('payment-success/<int:listing_id>/', views.payment_success, name='payment_success'),
     
     
     
