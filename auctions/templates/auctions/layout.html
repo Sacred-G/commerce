@@ -213,35 +213,35 @@
               <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
-                  href="#"
+                  href='#'
                   id="alertsDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="fas fa-bell fa-fw"></i>
+                  <i class="fas fa-bell fa-fw fa-lg"></i>
                   <!-- Counter - Alerts -->
-                  <span class="badge badge-danger badge-counter">3+</span>
+                  <span class='badge rounded-pill bg-danger badge-counter'>9</span>
+      
                 </a>
               </li>
-
+                    
               <!-- Nav Item - Messages -->
               <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
-                  href='{% url "inbox" %}'
+                  href='#'
                   id="messagesDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="fas fa-envelope fa-fw"></i>
+                  <i class="fas fa-envelope fa- fa-lg"></i>
                   <!-- Counter - Messages -->
-                  <span class="badge badge-danger badge-counter">
-                    {% if unread_count %}{{ unread_count }}{% endif %}
-                  </span>
+                  <span class='badge rounded-pill bg-danger badge-counter'>5+</span>
+                  
                 </a>
               </li>
 
