@@ -1,17 +1,14 @@
-{% extends "auctions/layout.html" %}
-
-{% block body %}
-    <h2>Your Watchlist</h2>
-    {% if watchlist %}
-        <ul>
-        {% for item in watchlist %}
-            <li>
-                <a href="{% url 'listing' item.listing.id %}">{{ item.listing.title }}</a>
-                - Current Price: ${{ item.listing.current_price }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Your watchlist is empty.</p>
-    {% endif %}
-{% endblock %}
+{% extends "auctions/layout.html" %} {% block body %}
+<h2>Your Watchlist</h2>
+{% if watchlist %}
+<ul>
+  {% for item in watchlist %}
+  <li>
+    <a href="{% url 'listing' item.listing.id %}">{{ item.listing.title }}</a>
+    - Current Price: ${{ item.listing.current_price }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Your watchlist is empty.</p>
+{% endif %} {% endblock %}

@@ -68,12 +68,20 @@
             margin: 0 auto;
             display: block;
             object-fit: contain;
+            border: 2px solid;
         }
         .carousel-control-prev,
         .carousel-control-next {
             width: 5%;
             display: none;
         }
+        .btn-primary {
+            color: #fff;
+            background-color: #267bff !important;
+            border-color: #261919;
+            margin-top: 10px;
+            border-radius: 10px;
+          }
     </style>
 
     <div class="card mb-4">
@@ -131,6 +139,11 @@
                         </button>
                     </form>
                 </div>
+                <div class="social-share-buttons">
+                    <button type='submit' name='social-share-buttons' class
+                    <button onclick="shareListing('twitter')">Share on Twitter</button>
+                  </div>
+                  
     {% endif %}
             {% else %}
                 <div class="alert alert-warning" role="alert">
@@ -171,28 +184,79 @@
 {% endif %}
     <div class="row mt-5">
         <div class="col-md-8">
-            <h2>Comments</h2>
-            {% for comment in listing.comments.all %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">{{ comment.user.username }} on {{ comment.created_at|date:"M d, Y H:i" }}</h6>
-                        <p class="card-text">{{ comment.content }}</p>
-                    </div>
-                </div>
-            {% empty %}
-                <p class="text-muted">No comments yet.</p>
-            {% endfor %}
-            {% if user.is_authenticated and user != listing.created_by %}
-                <form method="post" action="{% url 'add_comment' listing.id %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="comment">Add a comment:</label>
-                        <textarea class="form-control" id="comment" name="content" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
-                </form>
-            {% endif %}
+         <h3>Comments</h3>
+    {% for comment in listing.comments.all %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">{{ comment.user.username }} on {{ comment.created_at|date:"M d, Y H:i" }}</h6>
+                <p class="card-text">{{ comment.content }}</p>
+            </div>
         </div>
-    </div>
-</div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h4>Add a comment</h4>
+        <form method="post" action="{% url 'add_comment' listing.id %}">
+            {% csrf_token %}
+            {% if comment_form.errors %}
+                <div class="alert alert-danger">
+                    Please correct the error{{ comment_form.errors|pluralize }} below.
+                </div>
+            {% endif %}
+            {% for field in comment_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+    {% endif %}
+
+<script>
+    function shareListing(platform) {
+      const listingId = {{ listing.id }};  // Make sure to pass the listing ID from the backend
+      fetch(`/listing/${listingId}/share/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `platform=${platform}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.open(data.share_url, '_blank');
+        } else {
+          alert('Sharing failed. Please try again.');
+        }
+      });
+    }
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
 {% endblock %}

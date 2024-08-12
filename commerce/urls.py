@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
+from allauth.account.views import confirm_email
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("auctions.urls")),
-      path('accounts/', include('django.contrib.auth.urls')),  
+    path('accounts/', include('django.contrib.auth.urls')),  
+    path('social-auth/', include('social_django.urls', namespace='social')),
+    path('accounts/login/', TemplateView.as_view(template_name="account/login.html")),
+    path('accounts/signup/', TemplateView.as_view(template_name="account/signup.html")),
+    path('accounts/confirm-email/<str:key>/', confirm_email, name='account_confirm_email'),
+    path('accounts/', include('allauth.urls')),
 ]

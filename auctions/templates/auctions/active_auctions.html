@@ -1,54 +1,64 @@
-
-{% extends "auctions/layout.html" %}
-{% load static %}
-
-{% block body %}
+{% extends "auctions/layout.html" %} {% load static %} {% block body %}
 <div class="container">
-    <h1>Active Auctions</h1>
-    
-    <div class="row">
-        {% for listing in listings %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div id="carousel-{{ listing.id }}" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            {% if listing.main_image %}
-                                <div class="carousel-item active">
-                                    <img src="{{ listing.main_image.url }}" class="d-block w-50" alt="{{ listing.title }}">
-                                </div>
-                            {% endif %}
-                            {% for image in listing.images.all %}
-                                <div class="carousel-item {% if forloop.first and not listing.main_image %}active{% endif %}">
-                                    <img src="{{ image.image.url }}" class="d-block w-50" alt="{{ listing.title }}">
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ listing.title }}</h5>
-                        <p class="card-text">Current Price: ${{ listing.current_price }}</p>
-                        <p class="card-text flex-grow-1">{{ listing.description|truncatewords:30 }}</p>
-                    
-                        <a href="{% url 'listing' listing.id %}" class="btn btn-primary">View Listing</a>
+  <h1>Active Auctions</h1>
 
-                    </div>
-                </div>
+  <div class="row">
+    {% for listing in listings %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div
+          id="carousel-{{ listing.id }}"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            {% if listing.main_image %}
+            <div class="carousel-item active">
+              <img
+                src="{{ listing.main_image.url }}"
+                class="d-block w-50"
+                alt="{{ listing.title }}"
+              />
             </div>
-        {% endfor %}
-    </div>
-</div>
-{% endblock %}
+            {% endif %} {% for image in listing.images.all %}
+            <div
+              class="carousel-item {% if forloop.first and not listing.main_image %}active{% endif %}"
+            >
+              <img
+                src="{{ image.image.url }}"
+                class="d-block w-50"
+                alt="{{ listing.title }}"
+              />
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ listing.title }}</h5>
+          <p class="card-text">Current Price: ${{ listing.current_price }}</p>
+          <p class="card-text flex-grow-1">
+            {{ listing.description|truncatewords:30 }}
+          </p>
 
-{% block extra_js %}
+          <a href="{% url 'listing' listing.id %}" class="btn btn-primary"
+            >View Listing</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var carousels = document.querySelectorAll('.carousel');
-        carousels.forEach(function(carousel) {
-            new bootstrap.Carousel(carousel, {
-                interval: 3000,  // Change image every 3 seconds
-                wrap: true
-            });
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    var carousels = document.querySelectorAll(".carousel");
+    carousels.forEach(function (carousel) {
+      new bootstrap.Carousel(carousel, {
+        interval: 3000, // Change image every 3 seconds
+        wrap: true
+      });
     });
+  });
 </script>
 {% endblock %}

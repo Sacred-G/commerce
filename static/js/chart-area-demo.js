@@ -3,52 +3,38 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Area Chart Example
-const ctxAreaChart = document.getElementById('myAreaChart');
-const myAreaChart = new Chart(ctxAreaChart, {
-  type: 'line',
-  data: {
-    labels: ['Clothes', 'Food', 'Electronics', 'Books', 'Films', 'Toys', 'Health'],
-    datasets: [{
-      label: 'Categories',
-      lineTension: 0.3,
-      backgroundColor: 'rgba(2,117,216,0.2)',
-      borderColor: 'rgba(2,117,216,1)',
-      pointRadius: 5,
-      pointBackgroundColor: 'rgba(2,117,216,1)',
-      pointBorderColor: 'rgba(255,255,255,0.8)',
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(2,117,216,1)',
-      pointHitRadius: 50,
-      pointBorderWidth: 2,
-      data: [2, 5, 1, 3, 0, 0, 0],
-    }],
-  },
-  options: {
-    scales: {
-      xAxes: [{
-        time: {
-          unit: 'date'
-        },
-        gridLines: {
-          display: false
-        },
-        ticks: {
-          maxTicksLimit: 7
-        }
-      }],
-      yAxes: [{
-        ticks: {
-          min: 0,
-          max: 6,
-          maxTicksLimit: 5
-        },
-        gridLines: {
-          color: 'rgba(0, 0, 0, .125)',
-        }
-      }],
+var ctxLine = document.getElementById('myAreaChart').getContext('2d');
+var auctionActivityChart = new Chart(ctxLine, {
+    type: 'line',
+    data: {
+        labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+        datasets: [{
+            label: 'New Listings',
+            data: [12, 19, 3, 5, 2, 3, 10],
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }, {
+            label: 'Bids Placed',
+            data: [7, 11, 5, 8, 3, 7, 15],
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+        }]
     },
-    legend: {
-      display: false
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Recent Auction Activity'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
     }
-  }
 });

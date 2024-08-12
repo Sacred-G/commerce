@@ -1,249 +1,294 @@
-{% extends "auctions/layout.html" %}
-{% load static %}
-{% load custom_filters %}
-
+{% extends "auctions/layout.html" %} {% load static %} {% load custom_filters %}
 {% block body %}
 <div class="container py-5">
-    <div class="row mb-4">
-        <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4">Payment for {{ listing.title }}</h1>
-            <p class="lead mb-0">
-                Total Amount: ${{ listing.buy_it_now_price }}
+  <div class="row mb-4">
+    <div class="col-lg-8 mx-auto text-center">
+      <h1 class="display-4">Payment for {{ listing.title }}</h1>
+      <p class="lead mb-0">Total Amount: ${{ listing.buy_it_now_price }}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-7 mx-auto">
+      <div class="bg-light rounded-lg shadow-lg p-5">
+        <!-- Credit card form tabs -->
+        <ul role="tablist" class="nav nav-pills nav-fill mb-3">
+          <li class="nav-item">
+            <a
+              data-bs-toggle="pill"
+              href="#nav-tab-card"
+              class="nav-link rounded-pill active"
+            >
+              <i class="fa fa-credit-card"></i>
+              Credit Card
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              data-bs-toggle="pill"
+              href="#nav-tab-paypal"
+              class="nav-link rounded-pill"
+            >
+              <i class="fa fa-paypal"></i>
+              Paypal
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              data-bs-toggle="pill"
+              href="#nav-tab-bank"
+              class="nav-link rounded-pill"
+            >
+              <i class="fa fa-university"></i>
+              Bank Transfer
+            </a>
+          </li>
+        </ul>
+        <!-- End -->
+
+        <!-- Tab content -->
+        <div class="tab-content">
+          <!-- Credit card form -->
+          <div id="nav-tab-card" class="tab-pane fade show active">
+            <form role="form" id="payment-form">
+              <div class="form-group">
+                <label for="username">Full name (on the card)</label>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Jason Doe"
+                  required
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="cardNumber">Card number</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    name="cardNumber"
+                    placeholder="Your card number"
+                    class="form-control"
+                    required
+                  />
+                  <div class="input-group-append">
+                    <span class="input-group-text text-muted">
+                      <i class="fa fa-cc-visa"></i>
+                      <i class="fa fa-cc-amex"></i>
+                      <i class="fa fa-cc-mastercard"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="form-group">
+                    <label><span class="hidden-xs">Expiration</span></label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        placeholder="MM"
+                        name=""
+                        class="form-control"
+                        required
+                      />
+                      <input
+                        type="number"
+                        placeholder="YY"
+                        name=""
+                        class="form-control"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group mb-4">
+                    <label
+                      data-bs-toggle="tooltip"
+                      title="Three-digits code on the back of your card"
+                      >CVV
+                      <i class="fa fa-question-circle"></i>
+                    </label>
+                    <input type="text" required class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block rounded-pill shadow-sm"
+              >
+                Confirm
+              </button>
+            </form>
+          </div>
+          <!-- End -->
+
+          <!-- Paypal info -->
+          <div id="nav-tab-paypal" class="tab-pane fade">
+            <p>Paypal is the easiest way to pay online</p>
+            <p>
+              <button type="button" class="btn btn-primary rounded-pill">
+                <i class="fa fa-paypal mr-2"></i> Log into my Paypal
+              </button>
             </p>
+            <p class="text-muted">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+          <!-- End -->
+
+          <!-- Bank transfer info -->
+          <div id="nav-tab-bank" class="tab-pane fade">
+            <h6>Bank account details</h6>
+            <dl>
+              <dt>Bank</dt>
+              <dd>THE WORLD BANK</dd>
+            </dl>
+            <dl>
+              <dt>Account number</dt>
+              <dd>7775877975</dd>
+            </dl>
+            <dl>
+              <dt>IBAN</dt>
+              <dd>CZ7775877975656</dd>
+            </dl>
+            <p class="text-muted">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+          <!-- End -->
         </div>
-    </div>
+        <!-- End -->
 
-    <div class="row">
-        <div class="col-lg-7 mx-auto">
-            <div class="bg-light rounded-lg shadow-lg p-5">
-                <!-- Credit card form tabs -->
-                <ul role="tablist" class="nav nav-pills nav-fill mb-3">
-                    <li class="nav-item">
-                        <a data-bs-toggle="pill" href="#nav-tab-card" class="nav-link rounded-pill active">
-                            <i class="fa fa-credit-card"></i>
-                            Credit Card
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="pill" href="#nav-tab-paypal" class="nav-link rounded-pill">
-                            <i class="fa fa-paypal"></i>
-                            Paypal
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="pill" href="#nav-tab-bank" class="nav-link rounded-pill">
-                            <i class="fa fa-university"></i>
-                            Bank Transfer
-                        </a>
-                    </li>
-                </ul>
-                <!-- End -->
-
-                <!-- Tab content -->
-                <div class="tab-content">
-                    <!-- Credit card form -->
-                    <div id="nav-tab-card" class="tab-pane fade show active">
-                        <form role="form" id="payment-form"> 
-                          <div class="form-group">
-                            <label for="username">Full name (on the card)</label>
-                            <input type="text" name="username" placeholder="Jason Doe" required class="form-control" />
-                          </div>
-                          <div class="form-group">
-                            <label for="cardNumber">Card number</label>
-                            <div class="input-group">
-                              <input type="text" name="cardNumber" placeholder="Your card number" class="form-control" required />
-                              <div class="input-group-append">
-                                <span class="input-group-text text-muted">
-                                  <i class="fa fa-cc-visa"></i>
-                                  <i class="fa fa-cc-amex"></i>
-                                  <i class="fa fa-cc-mastercard"></i>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-sm-8">
-                              <div class="form-group">
-                                <label><span class="hidden-xs">Expiration</span></label>
-                                <div class="input-group">
-                                  <input type="number" placeholder="MM" name="" class="form-control" required />
-                                  <input type="number" placeholder="YY" name="" class="form-control" required />
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-sm-4">
-                              <div class="form-group mb-4">
-                                <label data-bs-toggle="tooltip" title="Three-digits code on the back of your card">CVV
-                                  <i class="fa fa-question-circle"></i>
-                                </label>
-                                <input type="text" required class="form-control" />
-                              </div>
-                            </div>
-                          </div>
-                          <button type="submit" class="btn btn-primary btn-block rounded-pill shadow-sm">
-                            Confirm
-                          </button>
-                        </form>
-                    </div>
-                    <!-- End -->
-
-                    <!-- Paypal info -->
-                    <div id="nav-tab-paypal" class="tab-pane fade">
-                        <p>Paypal is the easiest way to pay online</p>
-                        <p>
-                          <button type="button" class="btn btn-primary rounded-pill">
-                            <i class="fa fa-paypal mr-2"></i> Log into my Paypal
-                          </button>
-                        </p>
-                        <p class="text-muted">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                          do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                    </div>
-                    <!-- End -->
-
-                    <!-- Bank transfer info -->
-                    <div id="nav-tab-bank" class="tab-pane fade">
-                        <h6>Bank account details</h6>
-                        <dl>
-                          <dt>Bank</dt>
-                          <dd>THE WORLD BANK</dd>
-                        </dl>
-                        <dl>
-                          <dt>Account number</dt>
-                          <dd>7775877975</dd>
-                        </dl>
-                        <dl>
-                          <dt>IBAN</dt>
-                          <dd>CZ7775877975656</dd>
-                        </dl>
-                        <p class="text-muted">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                          do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                    </div>
-                    <!-- End -->
-                </div>
-                <!-- End -->
-
-                <!-- Stripe Payment -->
-                <div class="mt-5">
-                    <h3>Pay with Stripe</h3>
-                    <form action="{% url 'stripe_payment' listing.id %}" method="post">
-                        {% csrf_token %}
-                        <script
-                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key="{{ stripe_publishable_key }}"
-                            data-amount="{{ listing.current_price|floatformat:2|multiply:100|floatformat:0 }}"
-                            data-name="{{ listing.title }}"
-                            data-description="Auction Payment"
-                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                            data-locale="auto">
-                        </script>
-                    </form>
-                </div>
-                <!-- End Stripe Payment -->
-
-            </div>
+        <!-- Stripe Payment -->
+        <div class="mt-5">
+          <h3>Pay with Stripe</h3>
+          <form action="{% url 'stripe_payment' listing.id %}" method="post">
+            {% csrf_token %}
+            <script
+              src="https://checkout.stripe.com/checkout.js"
+              class="stripe-button"
+              data-key="{{ stripe_publishable_key }}"
+              data-amount="{{ listing.current_price|floatformat:2|multiply:100|floatformat:0 }}"
+              data-name="{{ listing.title }}"
+              data-description="Auction Payment"
+              data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+              data-locale="auto"
+            ></script>
+          </form>
         </div>
+        <!-- End Stripe Payment -->
+      </div>
     </div>
+  </div>
 </div>
 
 {%endblock%}
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    // Create a Stripe client.
-    var stripe = Stripe('pk_test_51Pl9QJ2KjtgLpJZbCl2wUFVmECJzTy0ohSXILpuxJE9cjtC8whdmfvWakGStJpRKrMc2Dqx7czPdYFD5dYFRLTTt001MJV7C5p');
+  // Create a Stripe client.
+  var stripe = Stripe(
+    "pk_test_51Pl9QJ2KjtgLpJZbCl2wUFVmECJzTy0ohSXILpuxJE9cjtC8whdmfvWakGStJpRKrMc2Dqx7czPdYFD5dYFRLTTt001MJV7C5p"
+  );
 
-    // Create an instance of Elements.
-    var elements = stripe.elements();
+  // Create an instance of Elements.
+  var elements = stripe.elements();
 
-    // Custom styling can be passed to options when creating an Element.
-    var style = {
-        base: {
-            // Add your base input styles here
-            fontSize: '16px',
-            color: '#32325d',
-        },
-    };
-
-    // Create an instance of the card Element.
-    var card = elements.create('card', {style: style});
-
-    // Add an instance of the card Element into the `card-element` <div>.
-    card.mount('#card-element');
-
-    // Handle real-time validation errors from the card Element.
-    card.addEventListener('change', function(event) {
-        var displayError = document.getElementById('card-errors');
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = '';
-        }
-    });
-
-    // Handle form submission.
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        stripe.createToken(card).then(function(result) {
-            if (result.error) {
-                // Inform the user if there was an error.
-                var errorElement = document.getElementById('card-errors');
-                errorElement.textContent = result.error.message;
-            } else {
-                // Send the token to your server.
-                stripeTokenHandler(result.token);
-            }
-        });
-    });
-
-    // Submit the form with the token ID.
-    function stripeTokenHandler(token) {
-        // Insert the token ID into the form so it gets submitted to the server
-        var form = document.getElementById('payment-form');
-        var hiddenInput = document.createElement('input');
-        hiddenInput.setAttribute('type', 'hidden');
-        hiddenInput.setAttribute('name', 'stripeToken');
-        hiddenInput.setAttribute('value', token.id);
-        form.appendChild(hiddenInput);
-
-        // Submit the form
-        form.submit();
+  // Custom styling can be passed to options when creating an Element.
+  var style = {
+    base: {
+      // Add your base input styles here
+      fontSize: "16px",
+      color: "#32325d"
     }
+  };
+
+  // Create an instance of the card Element.
+  var card = elements.create("card", { style: style });
+
+  // Add an instance of the card Element into the `card-element` <div>.
+  card.mount("#card-element");
+
+  // Handle real-time validation errors from the card Element.
+  card.addEventListener("change", function (event) {
+    var displayError = document.getElementById("card-errors");
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = "";
+    }
+  });
+
+  // Handle form submission.
+  var form = document.getElementById("payment-form");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function (result) {
+      if (result.error) {
+        // Inform the user if there was an error.
+        var errorElement = document.getElementById("card-errors");
+        errorElement.textContent = result.error.message;
+      } else {
+        // Send the token to your server.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  // Submit the form with the token ID.
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById("payment-form");
+    var hiddenInput = document.createElement("input");
+    hiddenInput.setAttribute("type", "hidden");
+    hiddenInput.setAttribute("name", "stripeToken");
+    hiddenInput.setAttribute("value", token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+  }
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}"></script>
 <script>
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      return fetch('{% url "paypal_create_order" listing.id %}', {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json'
-        }
-      }).then(function(res) {
-        return res.json();
-      }).then(function(data) {
-        return data.id;
-      });
-    },
-    onApprove: function(data, actions) {
-      return fetch('{% url "paypal_capture_order" listing.id %}', {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          orderID: data.orderID
+  paypal
+    .Buttons({
+      createOrder: function (data, actions) {
+        return fetch('{% url "paypal_create_order" listing.id %}', {
+          method: "post",
+          headers: {
+            "content-type": "application/json"
+          }
         })
-      }).then(function(res) {
-        return res.json();
-      }).then(function(details) {
-        alert('Transaction completed by ' + details.payer.name.given_name);
-      });
-    }
-  }).render('#paypal-button-container');
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (data) {
+            return data.id;
+          });
+      },
+      onApprove: function (data, actions) {
+        return fetch('{% url "paypal_capture_order" listing.id %}', {
+          method: "post",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({
+            orderID: data.orderID
+          })
+        })
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (details) {
+            alert("Transaction completed by " + details.payer.name.given_name);
+          });
+      }
+    })
+    .render("#paypal-button-container");
 </script>
