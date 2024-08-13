@@ -9,7 +9,7 @@ urlpatterns = [
 
     path("", views.index, name="index"),
     path("login/", views.login_view, name="login"),
-    path("logout/", views.logout_view, name="logout"),
+    path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("create", views.create_listing, name="create_listing"),
     path("watchlist/", views.watchlist, name="watchlist"),
@@ -43,6 +43,12 @@ urlpatterns = [
     path('paypal-create-order/<int:listing_id>/', views.paypal_create_order, name='paypal_create_order'),
     path('paypal-capture-order/<int:listing_id>/', views.paypal_capture_order, name='paypal_capture_order'),
     path('payment-success/<int:listing_id>/', views.payment_success, name='payment_success'),
+    path('auth/<str:backend>/', views.social_auth, name='social_auth'),
+    path('listing/<int:listing_id>/share/', views.share_listing, name='share_listing'),
+    path('listing/<int:listing_id>/end/', views.end_listing, name='end_listing'),
+    path('accounts/', include('allauth.urls')),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
     
     
@@ -51,7 +57,6 @@ urlpatterns = [
     
     
     
-    
-]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

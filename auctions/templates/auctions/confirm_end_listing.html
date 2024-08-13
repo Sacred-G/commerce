@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2>Confirm End Listing</h2>
+    <p>Are you sure you want to end the listing "{{ listing.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">End Listing</button>
+        <a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

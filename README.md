@@ -56,8 +56,8 @@ This is a Django-based web application for online auctions. Users can create lis
 2. Create a virtual environment and activate it:
 
    ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   python -m venv auctionenv
+   source auctionvenv/bin/activate  # On Windows use `auctionenv\Scripts\activate`
    ```
 
 3. Install the required packages:
@@ -91,6 +91,7 @@ This is a Django-based web application for online auctions. Users can create lis
 
    ```
    python manage.py runserver
+
    ```
 
 8. Open a web browser and navigate to `http://127.0.0.1:8000/`
@@ -175,7 +176,7 @@ Remember to handle cases where images might not exist to avoid errors in your te
 
 ## Usage
 
-- Register a new account or log in
+* Register a new account or log in
 * Create new auction listings with photos
 * Browse active auctions
 * Place bids on items
@@ -184,6 +185,10 @@ Remember to handle cases where images might not exist to avoid errors in your te
 * Use the messaging system to contact other users
 * View and update your profile, including profile picture
 * Process payments using PayPal or Stripe when winning an auction
+
+## Credit
+
+Thanks to BobsProgrammingAcademy for the dashboard. His work inspired the design
 
 ## Contributing
 

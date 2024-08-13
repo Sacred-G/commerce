@@ -1,6 +1,6 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
-
+{% load custom_filters %}
 
 {% block title %}Auctions | Dashboard{% endblock %}
 
@@ -178,17 +178,58 @@
             </div>
         </div>
     </div>
-   
-        <!-- Category Pie Chart -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Listings by Category Bar Chart</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Category Line Chart -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Listings by Category Bar Chart</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Auction Activity</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myBarChart"></canvas>
+                    <div class="chart-area">
+                        <canvas id="auctionActivityChart"></canvas>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Recent Activity</h4>
+                    {% if user.is_authenticated %}
+                        <ul class="list-group list-group-flush">
+                            {% for activity in recent_activities %}
+                                <li class="list-group-item">
+                                    {% if activity|class_name == 'Bid' %}
+                                        <i class="fas fa-gavel text-primary"></i> Bid ${{ activity.amount }}
+                                        on <a href="{% url 'listing' activity.auction.id %}">{{ activity.auction.title }}</a>
+                                        <small class="text-muted d-block">{{ activity.date|date:"M d, Y H:i" }}</small>
+                                    {% elif activity|class_name == 'AuctionListing' %}
+                                        <i class="fas fa-list-alt text-success"></i> Created auction
+                                        <a href="{% url 'listing' activity.id %}">{{ activity.title }}</a>
+                                        <small class="text-muted d-block">{{ activity.created_at|date:"M d, Y H:i" }}</small>
+                                    {% endif %}
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item">No recent activity to display.</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="card-text">Please log in to view your recent activity.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -214,8 +255,6 @@
                 </div>
             </div>
         </div>
-    <!-- You can add more charts or widgets here -->
-
 
 <!-- Existing listing cards -->
 <div class="row md-4">
@@ -283,4 +322,50 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script src="{% static 'auctions/js/chart-pie-demo.js' %}"></script>
 <script src="{% static 'auctions/js/chart-bar-demo.js' %}"></script>
+<script src="{% static 'auctions/js/chart-area-demo.js' %}"></script>
+<script src="{% static 'auctions/js/chartactivity.js' %}"></script>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category Pie Chart
+    var ctxLine = document.getElementById('auctionActivityChart').getContext('2d');
+    var auctionActivityChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+            datasets: [{
+                label: 'New Listings',
+                data: [12, 19, 3, 5, 2, 3, 10],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }, {
+                label: 'Bids Placed',
+                data: [7, 11, 5, 8, 3, 7, 15],
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Recent Auction Activity'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
 {% endblock %}

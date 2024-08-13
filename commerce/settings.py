@@ -40,8 +40,29 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap4',
+    'social_django',
+    'django_ckeditor_5',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIAL_AUTH_FACEBOOK_KEY = 'your-facebook-app-id'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'your-facebook-app-secret'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '472070812942-nq6boi0nmappg1i9hh523pdq84v8qf6e.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_TWITTER_KEY = 'your-twitter-api-key'
+SOCIAL_AUTH_TWITTER_SECRET = 'your-twitter-api-secret'
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
@@ -58,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+   
 ]
 
 ROOT_URLCONF = 'commerce.urls'
@@ -65,7 +87,7 @@ ROOT_URLCONF = 'commerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,15 +97,16 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'auctions.context_processors.categories_processor',
                 'auctions.context_processors.unread_messages',
+                'auctions.context_processors.recent_activities',
             ],
         },
     },
 ]
 
+ACCOUNT_LOGOUT_ON_GET = True
 WSGI_APPLICATION = 'commerce.wsgi.application'
 
-if os.environ.get('VERCEL_ENV') == 'production':
-    WSGI_APPLICATION = 'vercel_app.wsgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -160,3 +183,77 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID')
 PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET')
+
+customColorPalette = {
+    'borderColors': ['#000000', '#FF0000', '#00FF00', '#0000FF'], 
+    'backgroundColors': ['#FFFFFF', '#FFFF00', '#00FFFF', '#FF00FF']  
+}
+
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                    'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+
+    },
+    'extends': {
+        'blockToolbar': [
+            'paragraph', 'heading1', 'heading2', 'heading3',
+            '|',
+            'bulletedList', 'numberedList',
+            '|',
+            'blockQuote',
+        ],
+        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
+        'code','subscript', 'superscript', 'highlight', '|', 'codeBlock',
+        'sourceEditing', 'insertImage',
+                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
+                    'insertTable',],
+        'image': {
+            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
+                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+            'styles': [
+                'full',
+                'side',
+                'alignLeft',
+                'alignRight',
+                'alignCenter',
+            ]
+
+        },
+        'table': {
+            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
+            'tableProperties', 'tableCellProperties' ],
+            'tableProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            },
+            'tableCellProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            }
+        },
+        'heading' : {
+            'options': [
+                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
+                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
+                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
+                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
+            ]
+        }
+    }
+}
+ACCOUNT_ADAPTER = 'auctions.adapters.CustomAccountAdapter'
+LOGIN_REDIRECT_URL = 'index'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'index'
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '472070812942-nq6boi0nmappg1i9hh523pdq84v8qf6e.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}

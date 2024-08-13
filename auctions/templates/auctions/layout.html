@@ -7,14 +7,32 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=yes"
     />
-    <title>{% block title %}SGB Auctions{% endblock %}</title>
 
+    <meta
+      property="og:title"
+      content="{% block og_title %}Auctions{% endblock %}"
+    />
+    <meta
+      property="og:description"
+      content="{% block og_description %}An online auction platform for buying and selling items.{% endblock %}"
+    />
+    <meta
+      property="og:image"
+      content="{% block og_image %}{% static 'auctions/images/default_preview.png' %}{% endblock %}"
+    />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %} {% endblock %}"
+    />
     <link
       rel="icon"
       type="image/x-icon"
       href='{% static "auctions/images/favicon.ico" %}'
     />
-
     <!-- Icons -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -24,9 +42,6 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-
-    <!-- Bootstrap CSS -->
-
     <!-- Custom styles -->
     <link href='{% static "auctions/bootstrap.min.css" %}' rel="stylesheet" />
     <link href='{% static "auctions/styles.css" %}' rel="stylesheet" />
@@ -209,11 +224,10 @@
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
               {% if user.is_authenticated %}
-              <!-- Nav Item - Alerts -->
               <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
-                  href='#'
+                  href="#"
                   id="alertsDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -222,36 +236,90 @@
                 >
                   <i class="fas fa-bell fa-fw fa-lg"></i>
                   <!-- Counter - Alerts -->
-                  <span class='badge rounded-pill bg-danger badge-counter'>9</span>
-      
+                  <span class="badge rounded-pill bg-danger badge-counter"
+                    >{{ recent_activities|length }}</span
+                  >
                 </a>
+                <!-- Dropdown - Alerts -->
+                <div
+                  class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="alertsDropdown"
+                >
+                  <h6 class="dropdown-header">Recent Activity</h6>
+                  {% for activity in recent_activities|slice:":5" %}
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="{{ activity.link }}"
+                  >
+                    <div class="mr-3">
+                      <div class="icon-circle bg-{{ activity.icon_color }}">
+                        <i class="fas {{ activity.icon }} text-white"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="small text-gray-500">
+                        {{ activity.timestamp|date:"F d, Y" }}
+                      </div>
+                      <span class="font-weight-bold"
+                        >{{ activity.description }}</span
+                      >
+                    </div>
+                  </a>
+                  {% empty %}
+                  <a
+                    class="dropdown-item text-center small text-gray-500"
+                    href="#"
+                    >No recent activity</a
+                  >
+                  {% endfor %}
+                  <a
+                    class="dropdown-item text-center small text-gray-500"
+                    href="{% url 'profile' %}"
+                    >Show All Activity</a
+                  >
+                </div>
               </li>
-                    
+
               <!-- Nav Item - Messages -->
               <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
-                  href='#'
+                  href="#"
                   id="messagesDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="fas fa-envelope fa- fa-lg"></i>
+                  <i class="fas fa-envelope fa-fw fa-lg"></i>
                   <!-- Counter - Messages -->
-                  <span class='badge rounded-pill bg-danger badge-counter'>5+</span>
-                  
+                  <span class="badge rounded-pill bg-danger badge-counter"
+                    >5+</span
+                  >
                 </a>
+                <!-- Dropdown - Messages -->
+                <div
+                  class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="messagesDropdown"
+                >
+                  <h6 class="dropdown-header">Message Center</h6>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <!-- Add message items here -->
+                  </a>
+                  <a
+                    class="dropdown-item text-center small text-gray-500"
+                    href="{% url 'inbox' %}"
+                    >Read More Messages</a
+                  >
+                </div>
               </li>
-
               <div class="topbar-divider d-none d-sm-block"></div>
 
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
                 <a
                   class="nav-link dropdown-toggle"
-                  href="#"
+                  href='{% url "inbox" %}'
                   id="userDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -262,10 +330,10 @@
                     >{{ user.username }}</span
                   >
                   <img
-                  class="img-profile rounded-circle"
-                  style="width: 20px;"
-                  src='{% static "auctions/images/default_profile.webp" %}'
-              />
+                    class="img-profile rounded-circle"
+                    style="width: 20px"
+                    src='{% static "auctions/images/default_profile.webp" %}'
+                  />
                 </a>
                 <!-- Dropdown - User Information -->
                 <div
@@ -283,20 +351,27 @@
                     Messages
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a
-                    class="dropdown-item"
-                    href='{% url "logout" %}'
-                    data-toggle="modal"
-                    data-target="#logoutModal"
+                  <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    id="logout-form"
                   >
-                    <i
-                      class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
-                    ></i>
-                    Logout
-                  </a>
+                    {% csrf_token %}
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      onclick="document.getElementById('logout-form').submit();"
+                    >
+                      <i
+                        class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
+                      ></i>
+                      Logout
+                    </a>
+                  </form>
                 </div>
               </li>
               {% else %}
+
               <li class="nav-item">
                 <a class="nav-link" href='{% url "login" %}'>
                   <i class="fas fa-sign-in-alt"></i>&nbsp;Log In
@@ -307,29 +382,41 @@
                   <i class="fas fa-user-plus"></i>&nbsp;Register
                 </a>
               </li>
-              {% endif %}
+              <div class="social-login">
+                <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-primary">Login with Facebook</a>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger">Login with Google</a>
+                <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-info">Login with Twitter</a>
+              </div>
+              {% endif%}
+
             </ul>
           </nav>
           <!-- End of Topbar -->
-
+         {% block body %} {%endblock%}
           <!-- Begin Page Content -->
           <div class="container-fluid px-4 py-2">
-            {% block body %} {% endblock %}
+       
           </div>
-          <!-- /.container-fluid -->
+
+          ``
         </div>
         <!-- End of Main Content -->
-
+ 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span
-                >Copyright &copy; Steven Bouldin
-                <script>
-                  document.write(new Date().getFullYear());
-                </script></span
-              >
+              <span> Steven Bouldin {% now "Y" %}</span>
+              <span class="ml-3">
+                <a
+                  href="https://github.com/Sacred-G/commerce"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-500 hover:text-gray-700"
+                >
+                  <i class="fab fa-github fa-lg"></i> Source Code
+                </a>
+              </span>
             </div>
           </div>
         </footer>
@@ -419,7 +506,7 @@
 
     <!-- Custom scripts -->
 
-    <script src="{% static 'auctions/scripts.js' %}"></script>
+    <script src="{% static 'auctions/js/scripts.js' %}"></script>
 
     {% block extra_js %}{% endblock %}
   </body>

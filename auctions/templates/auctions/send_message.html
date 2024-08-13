@@ -1,10 +1,7 @@
-{% extends "auctions/layout.html" %}
-
-{% block body %}
-    <h2>Send Message</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Send</button>
-    </form>
+{% extends "auctions/layout.html" %} {% block body %}
+<h2>Send Message</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Send</button>
+</form>
 {% endblock %}

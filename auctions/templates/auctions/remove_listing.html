@@ -1,11 +1,9 @@
-{% extends "auctions/layout.html" %}
-
-{% block body %}
-    <h2>Confirm Removal</h2>
-    <p>Are you sure you want to remove the listing "{{ listing.title }}"?</p>
-    <form action="{% url 'remove_listing' listing.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Yes, Remove Listing</button>
-        <a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Cancel</a>
-    </form>
+{% extends "auctions/layout.html" %} {% block body %}
+<h2>Confirm Removal</h2>
+<p>Are you sure you want to remove the listing "{{ listing.title }}"?</p>
+<form action="{% url 'remove_listing' listing.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Yes, Remove Listing</button>
+  <a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Cancel</a>
+</form>
 {% endblock %}

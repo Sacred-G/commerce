@@ -22,7 +22,7 @@
   --bs-green: #4bbf73;
   --bs-teal: #20c997;
   --bs-cyan: #1f9bcf;
-  --bs-white: #fff;
+  --bs-white: #fff;form
   --bs-gray: #919aa1;
   --bs-gray-dark: #343a40;
   --bs-gray-100: #f8f9fa;
@@ -41,9 +41,9 @@
   --bs-warning: #f0ad4e;
   --bs-danger: #d9534f;
   --bs-light: #fff;
-  --bs-dark: #343a40;
-  --bs-primary-rgb: 126, 126, 26;
-  --bs-secondary-rgb: 155, 255, 255;
+  --bs-dark: #007;
+  --bs-primary-rgb: 26, 26, 26;
+  --bs-secondary-rgb: 255, 255, 255;
   --bs-success-rgb: 75, 191, 115;
   --bs-info-rgb: 31, 155, 207;
   --bs-warning-rgb: 240, 173, 78;
@@ -90,8 +90,7 @@ body {
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
   background-color: var(--bs-body-bg);
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
+  webkit-text-size-adjust: 100%;
 }
 hr {
   margin: 1rem 0;
@@ -303,7 +302,6 @@ caption {
 }
 th {
   text-align: inherit;
-  text-align: -webkit-match-parent;
 }
 tbody,
 td,
@@ -1979,9 +1977,9 @@ progress {
   font-weight: 400;
   line-height: 1.5;
   color: #55595c;
-  background-color: #f7f7f9;
+  background-color: #333;
   background-clip: padding-box;
-  border: 0 solid #ced4da;
+  border: 2px solid #ced4da;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -2503,7 +2501,6 @@ textarea.form-control-lg {
   -ms-flex-align: stretch;
   align-items: stretch;
   width: 100%;
-  background-color:blue
 }
 .input-group > .form-control,
 .input-group > .form-select {
@@ -2520,7 +2517,7 @@ textarea.form-control-lg {
 .input-group .btn {
   position: relative;
   z-index: 2;
-  background-color:#007
+  background-color: #007 !important;
 }
 .input-group .btn:focus {
   z-index: 3;
@@ -2537,7 +2534,7 @@ textarea.form-control-lg {
   color: #55595c;
   text-align: center;
   white-space: nowrap;
-  background-color: #55595c;
+  background-color: #eceeef;
   border: 0 solid #ced4da;
 }
 .input-group-lg > .btn,
@@ -2796,12 +2793,12 @@ fieldset:disabled .btn {
 }
 .btn-primary {
   color: #fff;
-  background-color: blue !important;
+  background-color: #1a1a1a;
   border-color: #1a1a1a;
 }
 .btn-primary:hover {
   color: #fff;
-  background-color: #007 !important;
+  background-color: #161616;
   border-color: #151515;
 }
 .btn-check:focus + .btn-primary,
@@ -4521,6 +4518,7 @@ fieldset:disabled .btn {
 .card-img-bottom,
 .card-img-top {
   width: 100%;
+  object-fit: scale-down;
 }
 .card-group > .card {
   margin-bottom: 0.75rem;
@@ -5713,24 +5711,26 @@ fieldset:disabled .btn {
   color: #55595c;
 }
 .carousel {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 .carousel.pointer-event {
   -ms-touch-action: pan-y;
   touch-action: pan-y;
 }
 .carousel-inner {
-  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   overflow: hidden;
 }
 .carousel-inner::after {
-  display: block;
+  display: flex;
   clear: both;
   content: "";
 }
 .carousel-item {
-  position: relative;
+  position: flex;
   display: none;
   float: left;
   width: 100%;
@@ -5799,12 +5799,13 @@ fieldset:disabled .btn {
   justify-content: center;
   width: 15%;
   padding: 0;
-  color: #fff;
+  color: black;
   text-align: center;
   background: 0 0;
   border: 0;
   opacity: 0.5;
   transition: opacity 0.15s ease;
+  background-color: black;
 }
 @media (prefers-reduced-motion: reduce) {
   .carousel-control-next,
@@ -5819,6 +5820,7 @@ fieldset:disabled .btn {
   color: #fff;
   text-decoration: none;
   outline: 0;
+  display: none;
   opacity: 0.9;
 }
 .carousel-control-prev {
@@ -6953,6 +6955,7 @@ fieldset:disabled .btn {
 }
 .mb-4 {
   margin-bottom: 1.5rem !important;
+  align-content:end;
 }
 .mb-5 {
   margin-bottom: 3rem !important;
@@ -7283,18 +7286,20 @@ fieldset:disabled .btn {
   --bs-text-opacity: 1;
 }
 .bg-primary {
-  --bs-bg-opacity: 1;
-  background-color: rgb(123,43,233)
-    
-   !important;
+  background-color: rgb(0, 27, 170) !important;
 }
 .bg-secondary {
-
+  --bs-bg-opacity: 1;
+  background-color: rgba(
+    var(--bs-secondary-rgb),
+    var(--bs-bg-opacity)
+  ) !important;
 }
 .bg-success {
   --bs-bg-opacity: 1;
   background-color: rgba(
-  
+    var(--bs-success-rgb),
+    var(--bs-bg-opacity)
   ) !important;
 }
 .bg-info {

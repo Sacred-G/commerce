@@ -1,19 +1,15 @@
-
-
-{% extends "auctions/layout.html" %}
-
-{% block body %}
+{% extends "auctions/layout.html" %} {% block body %}
 <div class="container py-5">
-    <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4">Payment Successful!</h1>
-            <p class="lead mb-0">
-                Thank you for your payment for {{ listing.title }}.
-            </p>
-            <p class="mt-3">
-                <a href="{% url 'index' %}" class="btn btn-primary">Return to Home</a>
-            </p>
-        </div>
+  <div class="row">
+    <div class="col-lg-8 mx-auto text-center">
+      <h1 class="display-4">Payment Successful!</h1>
+      <p class="lead mb-0">
+        Thank you for your payment for {{ listing.title }}.
+      </p>
+      <p class="mt-3">
+        <a href="{% url 'index' %}" class="btn btn-primary">Return to Home</a>
+      </p>
     </div>
+  </div>
 </div>
 {% endblock %}

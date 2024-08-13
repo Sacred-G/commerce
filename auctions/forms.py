@@ -3,10 +3,13 @@ from django import forms
 from .models import AuctionListing, Bid, Comment, Category, AuctionImage, Message, Profile, User
 from django import forms
 from .models import AuctionListing
-
+from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
 from .models import AuctionListing
+
+
 class AuctionForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditor5Widget(config_name='extends'))
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(),
         required=False,
@@ -19,7 +22,8 @@ class AuctionForm(forms.ModelForm):
 
     class Meta:
         model = AuctionListing
-        fields = ['title', 'description', 'starting_bid',  'buy_it_now_price','image_url', 'main_image', 'category', 'end_date']
+        fields = ['title', 'description', 'starting_bid',  'buy_it_now_price',
+                  'image_url', 'main_image', 'category', 'end_date']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
@@ -32,15 +36,18 @@ class AuctionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.all()
-        
-        
+
+
 class AuctionImageForm(forms.ModelForm):
     class Meta:
         model = AuctionImage
         fields = ['image']
 
-AuctionImageFormSet = forms.inlineformset_factory(AuctionListing, AuctionImage, form=AuctionImageForm, extra=2)
- 
+
+AuctionImageFormSet = forms.inlineformset_factory(
+    AuctionListing, AuctionImage, form=AuctionImageForm, extra=2)
+
+
 class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
@@ -48,6 +55,7 @@ class BidForm(forms.ModelForm):
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -65,9 +73,6 @@ class ListingImageForm(forms.ModelForm):
         widgets = {
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
-
-
 
 
 class EditListingForm(forms.ModelForm):
@@ -93,14 +98,13 @@ class MessageForm(forms.ModelForm):
         fields = ['recipient', 'subject', 'body']
 
 
-
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
 
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('bio', 'profile_picture')
-        

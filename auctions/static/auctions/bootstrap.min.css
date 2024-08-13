@@ -4431,7 +4431,7 @@ fieldset:disabled .btn {
 .card {
   position: relative;
   display: -ms-flexbox;
-  display: flex;
+  display:flex;
   -ms-flex-direction: column;
   flex-direction: column;
   min-width: 0;
@@ -4439,6 +4439,8 @@ fieldset:disabled .btn {
   background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
+  align-items:end;
+  border:1px solid black;
 }
 .card > hr {
   margin-right: 0;
@@ -4508,7 +4510,9 @@ fieldset:disabled .btn {
 .card-img,
 .card-img-bottom,
 .card-img-top {
+  
   width: 100%;
+  object-fit: scale-down;
 }
 .card-group > .card {
   margin-bottom: 0.75rem;
@@ -6946,7 +6950,7 @@ fieldset:disabled .btn {
 }
 .mb-4 {
   margin-bottom: 1.5rem !important;
-
+   align-content:end;
 }
 .mb-5 {
   margin-bottom: 3rem !important;
