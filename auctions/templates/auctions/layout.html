@@ -92,7 +92,26 @@
       .image-magnifier.active:hover .magnifier-lens {
         opacity: 1;
       }
+      .mb-4 {
+        margin-bottom: 1.5rem !important;
+        align-content:end;
       
+      }
+      .card-img-top {
+        width: 100%;
+        border-top-left-radius: 19px;
+        border-top-right-radius: 20px;
+        max-height: 158px;
+        object-fit: contain;
+      }
+      .card{
+
+        border-radius: 20px;
+      }
+      .card-header, .card-title {
+        color: inherit;
+        color: black;
+        background: #eaeaea;}
     </style>
     {% block extra_css %}{% endblock %}
   </head>
@@ -321,6 +340,10 @@
                       class="fas fa-envelope fa-sm fa-fw mr-2 text-gray-400"
                     ></i>
                     Messages
+                  </a>
+                  <a class="dropdown-item" href='{% url "admin:index" %}'>
+                    <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Admin
                   </a>
                   <div class="dropdown-divider"></div>
                   <a

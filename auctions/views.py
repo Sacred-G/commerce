@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Max, Count, Sum, OuterRef, Subquery
+from django.db.models import Max, Count, Sum, OuterRef, Subquery, Q
 from django import forms
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +16,7 @@ from .forms import AuctionForm, BidForm, CommentForm, MessageForm, UserForm, Pro
 from .utils import send_auction_message
 from django.core.exceptions import ValidationError
 import stripe
-
+from django.http import Http404
 
 
 
@@ -483,24 +483,13 @@ def edit_listing(request, listing_id):
         form = AuctionForm(instance=listing)
     
     return render(request, 'auctions/edit_listing.html', {'form': form, 'listing': listing})
-
-@login_required
 def inbox(request):
-    messages = Message.objects.filter(recipient=request.user).order_by('-created_at')
-    unread_count = messages.filter(read=False).count()
     received_messages = Message.objects.filter(recipient=request.user).order_by('-created_at')
     sent_messages = Message.objects.filter(sender=request.user).order_by('-created_at')
-    
-    # Mark all messages as read when the user views the inbox
-    messages.update(read=True)
-    
     return render(request, 'auctions/inbox.html', {
-        'messages': messages,
-        'unread_count': unread_count,
         'messages': received_messages,
-        'sent_messages': sent_messages,
+        'sent_messages': sent_messages
     })
-
 
 @login_required
 def send_message(request):
@@ -517,11 +506,22 @@ def send_message(request):
 
 @login_required
 def view_message(request, message_id):
-    message = get_object_or_404(Message, id=message_id, recipient=request.user)
-    if not message.read:
+    # Try to get the message where the user is either the recipient or the sender
+    message = Message.objects.filter(id=message_id).filter(
+        Q(recipient=request.user) | Q(sender=request.user)
+    ).first()
+
+    if message is None:
+        raise Http404("No Message matches the given query.")
+
+    sent_messages = Message.objects.filter(sender=request.user).order_by('-created_at')
+
+    if not message.read and message.recipient == request.user:
         message.read = True
         message.save()
-    return render(request, 'auctions/view_message.html', {'message': message})
+
+    return render(request, 'auctions/view_message.html', {'message': message, 'sent_messages': sent_messages})
+
 
 def get_unread_count(user):
     return Message.objects.filter(recipient=user, read=False).count()

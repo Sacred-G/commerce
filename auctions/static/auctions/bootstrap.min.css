@@ -6946,7 +6946,7 @@ fieldset:disabled .btn {
 }
 .mb-4 {
   margin-bottom: 1.5rem !important;
-
+  align-items:end;
 }
 .mb-5 {
   margin-bottom: 3rem !important;
