@@ -43,8 +43,17 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
+
+                <div class="image-magnifier-container">
+                    <button class="magnifier-toggle">Toggle Magnifier</button>
+                    <div class="image-magnifier">
+                      <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" class="magnifier-img">
+                      <div class="magnifier-lens"></div>
+                    </div>
+                  </div>
+            </div>
             {% endif %}
-        </div>
+     
     </div>
 
     <style>
@@ -74,6 +83,46 @@
             width: 5%;
             display: none;
         }
+        .image-magnifier-container {
+            position: relative;
+          }
+          
+          .magnifier-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+          
+          .image-magnifier {
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+          }
+          
+          .magnifier-img {
+            width: 100%;
+            display: block;
+          }
+          
+          .magnifier-lens {
+            position: absolute;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+          
+          .image-magnifier.active:hover .magnifier-lens {
+            opacity: 1;
+          }
+          
     </style>
 
     <div class="card mb-4">
@@ -192,6 +241,10 @@
                     <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
                 </form>
             {% endif %}
+            {% if user.is_authenticated and user == listing.created_by %}
+    <a href="{% url 'delete_auction' listing.id %}" class="btn btn-danger">Delete Auction</a>
+{% endif %}
+
         </div>
     </div>
 </div>

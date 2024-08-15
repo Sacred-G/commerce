@@ -919,3 +919,45 @@ body.sidebar-toggled footer.sticky-footer {
     font-size: 0.8em;
     color: #888;
 }
+
+
+.image-magnifier-container {
+    position: relative;
+  }
+  
+  .magnifier-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .image-magnifier {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  
+  .magnifier-img {
+    width: 100%;
+    display: block;
+  }
+  
+  .magnifier-lens {
+    position: absolute;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .image-magnifier.active:hover .magnifier-lens {
+    opacity: 1;
+  }
+  

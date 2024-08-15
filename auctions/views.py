@@ -11,9 +11,9 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.db import transaction
-from .models import AuctionListing, Bid, Category, Watchlist, Message, Profile, User, RecentlyViewed, Payment
+from .models import AuctionListing, Bid, Category, Watchlist, Message, Profile, User, RecentlyViewed, Payment,Comment
 from .forms import AuctionForm, BidForm, CommentForm, MessageForm, UserForm, ProfileForm, AuctionImageFormSet, AuctionImageForm
-from .utils import send_auction_end_message
+from .utils import send_auction_message
 from django.core.exceptions import ValidationError
 import stripe
 
@@ -217,6 +217,7 @@ def remove_from_watchlist(request, listing_id):
     messages.success(request, "Removed from watchlist.")
     return redirect('index')
 
+
 @login_required
 def place_bid(request, listing_id):
     listing = get_object_or_404(AuctionListing, pk=listing_id)
@@ -233,6 +234,26 @@ def place_bid(request, listing_id):
                         bid.save()
                         listing.current_price = bid_amount
                         listing.save()
+                        
+                        # Send messages about the new bid
+                        send_auction_message(
+                            sender=request.user, 
+                            recipient=listing.created_by, 
+                            listing=listing,
+                            message_type="new_bid_seller",
+                            additional_info={
+                                "bid_amount": bid_amount, 
+                                "bidder": request.user.username
+                            }
+                        )
+                        send_auction_message(
+                            sender=None, 
+                            recipient=request.user, 
+                            listing=listing,
+                            message_type="new_bid_buyer",
+                            additional_info={"bid_amount": bid_amount}
+                        )
+                        
                         messages.success(request, 'Your bid was placed successfully!')
                     else:
                         messages.error(request, 'Your bid must be higher than the current price.')
@@ -242,25 +263,49 @@ def place_bid(request, listing_id):
                 messages.error(request, 'This auction is no longer active.')
         else:
             messages.error(request, 'Invalid bid. Please enter a valid amount.')
+    
     return redirect('listing', listing_id=listing_id)
+
+
 @login_required
 def close_auction(request, listing_id):
     listing = get_object_or_404(AuctionListing, pk=listing_id)
-    if request.user == listing.created_by:
+    
+    if request.user != listing.created_by:
+        messages.error(request, "You don't have permission to close this auction.")
+        return redirect('listing', listing_id=listing_id)
+    
+    if not listing.is_active:
+        messages.warning(request, "This auction is already closed.")
+        return redirect('listing', listing_id=listing_id)
+    
+    if request.method == 'POST':
         listing.is_active = False
         highest_bid = Bid.objects.filter(auction=listing).order_by('-amount').first()
+        
         if highest_bid:
             listing.winner = highest_bid.user
-            # Create a system message for the winner
-            Message.objects.create(
-                sender=None,  # No sender for system messages
-                recipient=listing.winner,
-                subject=f"Congratulations! You won the auction for {listing.title}",
-                body=f"You have won the auction for {listing.title} with a bid of ${highest_bid.amount}. Please proceed with the payment and shipping arrangements.",
-                is_system_message=True
-            )
-        listing.save()
+            listing.current_price = highest_bid.amount
+            
+            # Send messages
+            send_auction_message(None, listing.created_by, listing, 'auction_end_seller')
+            send_auction_message(None, listing.winner, listing, 'auction_won')
+            
+            # Notify other bidders
+            other_bidders = Bid.objects.filter(auction=listing).exclude(user=listing.winner).values_list('user', flat=True).distinct()
+            for bidder in other_bidders:
+                send_auction_message(None, bidder, listing, 'auction_end_buyer')
+            
+            listing.save()
+            messages.success(request, 'Auction closed successfully.')
+            return redirect('payment', listing_id=listing_id)
+        else:
+            listing.save()
+            send_auction_message(None, listing.created_by, listing, 'auction_end_seller')
+            messages.info(request, 'Auction closed, but there were no bids.')
+    
     return redirect('listing', listing_id=listing_id)
+
 @login_required
 def confirm_payment(request, listing_id):
     listing = get_object_or_404(AuctionListing, pk=listing_id)
@@ -443,13 +488,17 @@ def edit_listing(request, listing_id):
 def inbox(request):
     messages = Message.objects.filter(recipient=request.user).order_by('-created_at')
     unread_count = messages.filter(read=False).count()
+    received_messages = Message.objects.filter(recipient=request.user).order_by('-created_at')
+    sent_messages = Message.objects.filter(sender=request.user).order_by('-created_at')
     
     # Mark all messages as read when the user views the inbox
     messages.update(read=True)
     
     return render(request, 'auctions/inbox.html', {
         'messages': messages,
-        'unread_count': unread_count
+        'unread_count': unread_count,
+        'messages': received_messages,
+        'sent_messages': sent_messages,
     })
 
 
@@ -683,3 +732,39 @@ def paypal_capture_order(request, listing_id):
 def payment_success(request, listing_id):
     listing = AuctionListing.objects.get(id=listing_id)
     return render(request, 'auctions/payment_success.html', {'listing': listing})
+
+
+@login_required
+def delete_auction(request, listing_id):
+    listing = get_object_or_404(AuctionListing, pk=listing_id)
+    
+    if request.user != listing.created_by:
+        messages.error(request, "You don't have permission to delete this auction.")
+        return redirect('listing', listing_id=listing_id)
+    
+    if request.method == 'POST':
+        listing_title = listing.title  # Store the title before deletion
+        
+        # Delete related objects
+        Bid.objects.filter(auction=listing).delete()
+        Comment.objects.filter(listing=listing).delete()
+        Watchlist.objects.filter(listing=listing).delete()
+        
+        # Delete the auction
+        listing.delete()
+        
+        # Add success message
+        messages.success(request, f"Your auction '{listing_title}' has been successfully deleted.")
+        
+        # Send confirmation message to the user
+        send_auction_message(
+            user=request.user,
+            listing=None,  # The listing is already deleted
+            role="seller",
+            message_type="auction_deleted",
+            additional_info={"title": listing_title}
+        )
+        
+        return redirect('index')  # Redirect to home page or user's listings
+    
+    return render(request, 'auctions/confirm_delete.html', {'listing': listing})

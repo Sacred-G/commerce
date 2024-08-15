@@ -1,0 +1,16 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete the auction for "{{ listing.title }}"?</p>
+    <p>This action cannot be undone.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete Auction</button>
+        <a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

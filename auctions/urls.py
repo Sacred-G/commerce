@@ -43,6 +43,7 @@ urlpatterns = [
     path('paypal-create-order/<int:listing_id>/', views.paypal_create_order, name='paypal_create_order'),
     path('paypal-capture-order/<int:listing_id>/', views.paypal_capture_order, name='paypal_capture_order'),
     path('payment-success/<int:listing_id>/', views.payment_success, name='payment_success'),
+    path('listing/<int:listing_id>/delete/', views.delete_auction, name='delete_auction'),
     
     
     
